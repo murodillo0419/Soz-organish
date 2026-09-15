@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>600 ta eng kerakli inglizcha so'z</title>
+<style>
+  :root {
+    --bg: #f4f1ea;
+    --card-front: #ffffff;
+    --card-back: #2f6f5e;
+    --accent: #d9622b;
+    --text-dark: #24302a;
+    --text-light: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    padding: 16px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 1.3rem;
+    margin: 0 0 4px 0;
+  }
+  p.sub {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+  }
+  .controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .controls input {
+    flex: 1;
+    min-width: 160px;
+    max-width: 320px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+  }
+  .counter {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 10px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .card-wrap {
+    perspective: 800px;
+    height: 90px;
+    cursor: pointer;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6px;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .front {
+    background: var(--card-front);
+    color: var(--text-dark);
+    border: 1px solid #e3ddcf;
+    font-size: 1rem;
+  }
+  .back {
+    background: var(--card-back);
+    color: var(--text-light);
+    transform: rotateY(180deg);
+    font-size: 0.95rem;
+  }
+  .card-wrap.speaking .front {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .icon {
+    font-size: 0.7rem;
+    opacity: 0.5;
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+  }
+  .hidden { display: none !important; }
+  .card-wrap.dim { opacity: 0.25; }
+  .card-wrap.match .front {
+    border-color: var(--accent);
+  }
+  .card-wrap.current .front {
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 0 4px rgba(217,98,43,0.25);
+    transform: scale(1.06);
+  }
+  .card-wrap.current { transition: transform 0.2s; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>600 ta eng kerakli inglizcha so'z</h1>
+  <p class="sub">1-bosish: talaffuz &nbsp;|&nbsp; 2-bosish: o'zbekcha tarjima &nbsp;|&nbsp; 3-bosish: asl holatiga qaytadi</p>
+</header>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="So'z qidirish... (Enter — keyingisiga o'tish)">
+</div>
+<div class="counter" id="counter"></div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const WORDS = [["I", "men"], ["you", "sen"], ["he", "u (erkak)"], ["she", "u (ayol)"], ["it", "u (narsa)"], ["we", "biz"], ["they", "ular"], ["this", "bu"], ["that", "ana u"], ["these", "bular"], ["those", "analar"], ["who", "kim"], ["what", "nima"], ["where", "qayer"], ["when", "qachon"], ["why", "nega"], ["how", "qanday"], ["which", "qaysi"], ["my", "mening"], ["your", "sening"], ["one", "bir"], ["two", "ikki"], ["three", "uch"], ["four", "to'rt"], ["five", "besh"], ["six", "olti"], ["seven", "yetti"], ["eight", "sakkiz"], ["nine", "to'qqiz"], ["ten", "o'n"], ["eleven", "o'n bir"], ["twelve", "o'n ikki"], ["thirteen", "o'n uch"], ["twenty", "yigirma"], ["thirty", "o'ttiz"], ["forty", "qirq"], ["fifty", "ellik"], ["sixty", "oltmish"], ["seventy", "yetmish"], ["eighty", "sakson"], ["ninety", "to'qson"], ["hundred", "yuz"], ["thousand", "ming"], ["million", "million"], ["first", "birinchi"], ["second", "ikkinchi"], ["third", "uchinchi"], ["last", "oxirgi"], ["half", "yarim"], ["zero", "nol"], ["time", "vaqt"], ["day", "kun"], ["night", "tun"], ["morning", "ertalab"], ["afternoon", "tushdan keyin"], ["evening", "kechqurun"], ["week", "hafta"], ["month", "oy"], ["year", "yil"], ["hour", "soat"], ["minute", "daqiqa"], ["today", "bugun"], ["tomorrow", "ertaga"], ["yesterday", "kecha"], ["now", "hozir"], ["later", "keyinroq"], ["early", "erta"], ["late", "kech"], ["always", "doimo"], ["never", "hech qachon"], ["sometimes", "ba'zan"], ["often", "tez-tez"], ["Monday", "dushanba"], ["Tuesday", "seshanba"], ["Wednesday", "chorshanba"], ["Thursday", "payshanba"], ["Friday", "juma"], ["Saturday", "shanba"], ["Sunday", "yakshanba"], ["January", "yanvar"], ["February", "fevral"], ["March", "mart"], ["April", "aprel"], ["May", "may"], ["June", "iyun"], ["July", "iyul"], ["August", "avgust"], ["September", "sentyabr"], ["October", "oktyabr"], ["November", "noyabr"], ["December", "dekabr"], ["season", "fasl"], ["spring", "bahor"], ["summer", "yoz"], ["autumn", "kuz"], ["winter", "qish"], ["family", "oila"], ["mother", "ona"], ["father", "ota"], ["parent", "ota-ona"], ["son", "o'g'il"], ["daughter", "qiz"], ["brother", "aka-uka"], ["sister", "opa-singil"], ["husband", "er"], ["wife", "xotin"], ["child", "bola"], ["children", "bolalar"], ["baby", "chaqaloq"], ["grandmother", "buvi"], ["grandfather", "bobo"], ["aunt", "xola/amma"], ["uncle", "amaki/tog'a"], ["cousin", "amakivachcha"], ["friend", "do'st"], ["neighbor", "qo'shni"], ["man", "erkak"], ["woman", "ayol"], ["boy", "o'g'il bola"], ["girl", "qiz bola"], ["people", "odamlar"], ["body", "tana"], ["head", "bosh"], ["face", "yuz"], ["eye", "ko'z"], ["ear", "quloq"], ["nose", "burun"], ["mouth", "og'iz"], ["tooth", "tish"], ["tongue", "til"], ["hair", "soch"], ["neck", "bo'yin"], ["shoulder", "yelka"], ["arm", "qo'l"], ["hand", "kaft"], ["finger", "barmoq"], ["leg", "oyoq"], ["foot", "panja"], ["knee", "tizza"], ["back", "orqa"], ["chest", "ko'krak"], ["heart", "yurak"], ["stomach", "qorin"], ["skin", "teri"], ["bone", "suyak"], ["blood", "qon"], ["brain", "miya"], ["lip", "lab"], ["chin", "iyak"], ["elbow", "tirsak"], ["nail", "tirnoq"], ["color", "rang"], ["red", "qizil"], ["blue", "ko'k"], ["green", "yashil"], ["yellow", "sariq"], ["black", "qora"], ["white", "oq"], ["orange", "to'q sariq"], ["purple", "binafsha"], ["pink", "pushti"], ["brown", "jigarrang"], ["gray", "kulrang"], ["gold", "oltin rang"], ["silver", "kumush rang"], ["food", "ovqat"], ["water", "suv"], ["bread", "non"], ["rice", "guruch"], ["meat", "go'sht"], ["chicken", "tovuq go'shti"], ["fish", "baliq"], ["egg", "tuxum"], ["milk", "sut"], ["cheese", "pishloq"], ["butter", "sariyog'"], ["oil", "moy"], ["salt", "tuz"], ["sugar", "shakar"], ["tea", "choy"], ["coffee", "qahva"], ["juice", "sharbat"], ["fruit", "meva"], ["vegetable", "sabzavot"], ["apple", "olma"], ["banana", "banan"], ["grape", "uzum"], ["watermelon", "tarvuz"], ["melon", "qovun"], ["potato", "kartoshka"], ["tomato", "pomidor"], ["onion", "piyoz"], ["carrot", "sabzi"], ["cabbage", "karam"], ["cucumber", "bodring"], ["soup", "sho'rva"], ["salad", "salat"], ["cake", "tort"], ["candy", "konfet"], ["honey", "asal"], ["jam", "murabbo"], ["breakfast", "nonushta"], ["lunch", "tushlik"], ["dinner", "kechki ovqat"], ["hungry", "och"], ["thirsty", "chanqagan"], ["delicious", "mazali"], ["sweet", "shirin"], ["sour", "nordon"], ["bitter", "achchiq"], ["spicy", "achchiq (ziravorli)"], ["restaurant", "restoran"], ["kitchen", "oshxona"], ["plate", "tarelka"], ["spoon", "qoshiq"], ["fork", "vilka"], ["knife", "pichoq"], ["cup", "piyola"], ["bottle", "shisha"], ["basket", "savat"], ["animal", "hayvon"], ["dog", "it"], ["cat", "mushuk"], ["bird", "qush"], ["horse", "ot"], ["cow", "sigir"], ["sheep", "qo'y"], ["goat", "echki"], ["pig", "cho'chqa"], ["duck", "o'rdak"], ["lion", "sher"], ["tiger", "yo'lbars"], ["elephant", "fil"], ["bear", "ayiq"], ["wolf", "bo'ri"], ["fox", "tulki"], ["rabbit", "quyon"], ["monkey", "maymun"], ["mouse", "sichqon"], ["snake", "ilon"], ["frog", "qurbaqa"], ["insect", "hasharot"], ["bee", "ari"], ["butterfly", "kapalak"], ["spider", "o'rgimchak"], ["fly", "chivin"], ["ant", "chumoli"], ["camel", "tuya"], ["donkey", "eshak"], ["deer", "kiyik"], ["eagle", "burgut"], ["owl", "boyqush"], ["turtle", "toshbaqa"], ["whale", "kit"], ["shark", "akula"], ["dolphin", "delfin"], ["zebra", "zebra"], ["giraffe", "jirafa"], ["clothes", "kiyim"], ["shirt", "ko'ylak"], ["trousers", "shim"], ["dress", "libos"], ["skirt", "yubka"], ["jacket", "kurtka"], ["coat", "palto"], ["hat", "shlyapa"], ["shoe", "tufli"], ["sock", "paypoq"], ["glove", "qo'lqop"], ["scarf", "sharf"], ["belt", "kamar"], ["button", "tugma"], ["pocket", "cho'ntak"], ["size", "o'lcham"], ["wear", "kiymoq"], ["clean", "toza"], ["dirty", "iflos"], ["new", "yangi"], ["old", "eski"], ["cheap", "arzon"], ["expensive", "qimmat"], ["wash", "yuvmoq"], ["house", "uy"], ["home", "uy-joy"], ["room", "xona"], ["door", "eshik"], ["window", "deraza"], ["wall", "devor"], ["floor", "pol"], ["roof", "tom"], ["bedroom", "yotoqxona"], ["bathroom", "hammom"], ["table", "stol"], ["chair", "stul"], ["bed", "karavot"], ["sofa", "divan"], ["lamp", "chiroq"], ["mirror", "oyna"], ["shelf", "tokcha"], ["key", "kalit"], ["garden", "bog'"], ["yard", "hovli"], ["stairs", "zinapoya"], ["ceiling", "shift"], ["curtain", "parda"], ["pillow", "yostiq"], ["blanket", "adyol"], ["towel", "sochiq"], ["television", "televizor"], ["refrigerator", "muzlatgich"], ["telephone", "telefon"], ["weather", "ob-havo"], ["sun", "quyosh"], ["moon", "oy"], ["star", "yulduz"], ["sky", "osmon"], ["cloud", "bulut"], ["rain", "yomg'ir"], ["snow", "qor"], ["wind", "shamol"], ["storm", "bo'ron"], ["hot", "issiq"], ["cold", "sovuq"], ["warm", "iliq"], ["cool", "salqin"], ["ice", "muz"], ["fire", "olov"], ["earth", "yer"], ["mountain", "tog'"], ["river", "daryo"], ["lake", "ko'l"], ["sea", "dengiz"], ["ocean", "okean"], ["forest", "o'rmon"], ["tree", "daraxt"], ["flower", "gul"], ["grass", "o't"], ["leaf", "barg"], ["stone", "tosh"], ["sand", "qum"], ["island", "orol"], ["work", "ish"], ["job", "kasb"], ["teacher", "o'qituvchi"], ["doctor", "shifokor"], ["nurse", "hamshira"], ["engineer", "muhandis"], ["driver", "haydovchi"], ["farmer", "fermer"], ["worker", "ishchi"], ["student", "o'quvchi"], ["police", "politsiya"], ["soldier", "askar"], ["cook", "oshpaz"], ["singer", "qo'shiqchi"], ["writer", "yozuvchi"], ["artist", "rassom"], ["businessman", "tadbirkor"], ["lawyer", "advokat"], ["dentist", "stomatolog"], ["pilot", "uchuvchi"], ["actor", "aktyor"], ["scientist", "olim"], ["manager", "menejer"], ["seller", "sotuvchi"], ["builder", "quruvchi"], ["president", "prezident"], ["king", "podshoh"], ["queen", "malika"], ["boss", "boshliq"], ["employee", "xodim"], ["city", "shahar"], ["village", "qishloq"], ["country", "mamlakat"], ["street", "ko'cha"], ["road", "yo'l"], ["school", "maktab"], ["university", "universitet"], ["hospital", "kasalxona"], ["shop", "do'kon"], ["market", "bozor"], ["park", "park"], ["airport", "aeroport"], ["station", "vokzal"], ["bank", "bank"], ["hotel", "mehmonxona"], ["museum", "muzey"], ["library", "kutubxona"], ["church", "cherkov"], ["mosque", "machit"], ["bridge", "ko'prik"], ["factory", "zavod"], ["office", "ofis"], ["stadium", "stadion"], ["zoo", "hayvonot bog'i"], ["cinema", "kinoteatr"], ["beach", "plyaj"], ["farm", "ferma"], ["building", "bino"], ["place", "joy"], ["world", "dunyo"], ["car", "mashina"], ["bus", "avtobus"], ["train", "poyezd"], ["plane", "samolyot"], ["bicycle", "velosiped"], ["boat", "qayiq"], ["ship", "kema"], ["taxi", "taksi"], ["truck", "yuk mashinasi"], ["motorcycle", "mototsikl"], ["ticket", "chipta"], ["travel", "sayohat qilmoq"], ["trip", "sayohat"], ["drive", "haydamoq"], ["walk", "yurmoq"], ["run", "yugurmoq"], ["stop", "to'xtamoq"], ["arrive", "yetib kelmoq"], ["leave", "ketmoq"], ["book", "kitob"], ["pen", "ruchka"], ["pencil", "qalam"], ["paper", "qog'oz"], ["notebook", "daftar"], ["page", "bet"], ["word", "so'z"], ["letter", "harf"], ["sentence", "gap"], ["question", "savol"], ["answer", "javob"], ["lesson", "dars"], ["class", "sinf"], ["homework", "uy vazifasi"], ["exam", "imtihon"], ["test", "test"], ["study", "o'qimoq"], ["learn", "o'rganmoq"], ["teach", "o'qitmoq"], ["read", "o'qimoq"], ["write", "yozmoq"], ["understand", "tushunmoq"], ["remember", "eslamoq"], ["forget", "unutmoq"], ["be", "bo'lmoq"], ["have", "ega bo'lmoq"], ["do", "qilmoq"], ["go", "bormoq"], ["come", "kelmoq"], ["see", "ko'rmoq"], ["look", "qaramoq"], ["hear", "eshitmoq"], ["listen", "tinglamoq"], ["speak", "gapirmoq"], ["talk", "suhbatlashmoq"], ["say", "aytmoq"], ["tell", "aytib bermoq"], ["ask", "so'ramoq"], ["give", "bermoq"], ["take", "olmoq"], ["get", "olmoq"], ["make", "yasamoq"], ["want", "xohlamoq"], ["need", "kerak bo'lmoq"], ["like", "yoqtirmoq"], ["love", "sevmoq"], ["hate", "yomon ko'rmoq"], ["know", "bilmoq"], ["think", "o'ylamoq"], ["believe", "ishonmoq"], ["feel", "his qilmoq"], ["find", "topmoq"], ["lose", "yo'qotmoq"], ["buy", "sotib olmoq"], ["sell", "sotmoq"], ["pay", "to'lamoq"], ["spend", "sarflamoq"], ["open", "ochmoq"], ["close", "yopmoq"], ["start", "boshlamoq"], ["finish", "tugatmoq"], ["continue", "davom etmoq"], ["try", "harakat qilmoq"], ["help", "yordam bermoq"], ["use", "foydalanmoq"], ["play", "o'ynamoq"], ["sleep", "uxlamoq"], ["wake", "uyg'onmoq"], ["sit", "o'tirmoq"], ["stand", "turmoq"], ["wait", "kutmoq"], ["live", "yashamoq"], ["die", "o'lmoq"], ["grow", "o'smoq"], ["change", "o'zgarmoq"], ["move", "harakatlanmoq"], ["turn", "burilmoq"], ["put", "qo'ymoq"], ["carry", "ko'tarmoq"], ["bring", "olib kelmoq"], ["send", "yubormoq"], ["receive", "qabul qilmoq"], ["meet", "uchrashmoq"], ["visit", "tashrif buyurmoq"], ["call", "qo'ng'iroq qilmoq"], ["laugh", "kulmoq"], ["cry", "yig'lamoq"], ["smile", "tabassum qilmoq"], ["sing", "qo'shiq aytmoq"], ["dance", "raqsga tushmoq"], ["break", "sindirmoq"], ["fix", "tuzatmoq"], ["build", "qurmoq"], ["fight", "jang qilmoq"], ["win", "yutmoq"], ["choose", "tanlamoq"], ["decide", "qaror qilmoq"], ["agree", "rozi bo'lmoq"], ["good", "yaxshi"], ["bad", "yomon"], ["big", "katta"], ["small", "kichik"], ["tall", "baland bo'yli"], ["short", "past"], ["long", "uzun"], ["wide", "keng"], ["narrow", "tor"], ["heavy", "og'ir"], ["light", "yengil"], ["fast", "tez"], ["slow", "sekin"], ["strong", "kuchli"], ["weak", "zaif"], ["happy", "baxtli"], ["sad", "g'amgin"], ["angry", "jahldor"], ["afraid", "qo'rqqan"], ["tired", "charchagan"], ["sick", "kasal"], ["healthy", "sog'lom"], ["beautiful", "chiroyli"], ["ugly", "xunuk"], ["easy", "oson"], ["difficult", "qiyin"], ["important", "muhim"], ["interesting", "qiziqarli"], ["boring", "zerikarli"], ["funny", "kulgili"], ["kind", "mehribon"], ["rude", "qo'pol"], ["smart", "aqlli"], ["stupid", "ahmoq"], ["rich", "boy"], ["poor", "kambag'al"], ["full", "to'la"], ["empty", "bo'sh"], ["right", "to'g'ri"], ["wrong", "noto'g'ri"], ["true", "haqiqiy"], ["false", "yolg'on"], ["same", "bir xil"], ["different", "boshqa"], ["near", "yaqin"], ["far", "uzoq"], ["high", "baland"], ["low", "past"], ["deep", "chuqur"], ["quiet", "jim"], ["loud", "baland ovozli"], ["soft", "yumshoq"], ["hard", "qattiq"], ["dry", "quruq"], ["wet", "nam"], ["young", "yosh"], ["dangerous", "xavfli"], ["name", "ism"], ["age", "yosh"], ["language", "til"], ["culture", "madaniyat"], ["money", "pul"], ["price", "narx"], ["gift", "sovg'a"], ["party", "ziyofat"], ["game", "o'yin"], ["sport", "sport"], ["music", "musiqa"], ["film", "film"], ["story", "hikoya"], ["news", "yangilik"], ["idea", "fikr"], ["problem", "muammo"], ["solution", "yechim"], ["reason", "sabab"], ["result", "natija"], ["example", "misol"], ["plan", "reja"], ["dream", "orzu"], ["hope", "umid"], ["life", "hayot"], ["death", "o'lim"]];
+
+const grid = document.getElementById('grid');
+const counter = document.getElementById('counter');
+const searchBox = document.getElementById('search');
+
+function speak(text) {
+  try {
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'en-US';
+    utter.rate = 0.9;
+    window.speechSynthesis.speak(utter);
+  } catch (e) {
+    console.log('TTS error', e);
+  }
+}
+
+function buildCard(en, uz) {
+  const wrap = document.createElement('div');
+  wrap.className = 'card-wrap';
+  wrap.dataset.state = '0';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const front = document.createElement('div');
+  front.className = 'face front';
+  front.textContent = en;
+
+  const back = document.createElement('div');
+  back.className = 'face back';
+  back.textContent = uz;
+
+  card.appendChild(front);
+  card.appendChild(back);
+  wrap.appendChild(card);
+
+  wrap.addEventListener('click', () => {
+    let state = parseInt(wrap.dataset.state, 10);
+    state = (state + 1) % 3;
+    wrap.dataset.state = String(state);
+
+    if (state === 1) {
+      // 1-klik: talaffuz qilish, old tomonda qoladi
+      card.classList.remove('flipped');
+      wrap.classList.add('speaking');
+      speak(en);
+      setTimeout(() => wrap.classList.remove('speaking'), 700);
+    } else if (state === 2) {
+      // 2-klik: aylanib, o'zbekchasini ko'rsatish
+      card.classList.add('flipped');
+    } else {
+      // 3-klik: asl holatiga qaytish
+      card.classList.remove('flipped');
+    }
+  });
+
+  wrap._enText = en.toLowerCase();
+  return wrap;
+}
+
+// Butun to'plam faqat bir marta chiziladi, keyin qidiruv shu kartalar ustida ishlaydi
+const cardEls = WORDS.map(([en, uz]) => buildCard(en, uz));
+const frag = document.createDocumentFragment();
+cardEls.forEach(el => frag.appendChild(el));
+grid.appendChild(frag);
+counter.textContent = WORDS.length + " ta so'z";
+
+let matches = [];
+let currentMatchIndex = -1;
+
+function clearHighlights() {
+  cardEls.forEach(el => el.classList.remove('dim', 'match', 'current'));
+}
+
+function goToMatch(idx) {
+  cardEls.forEach(el => el.classList.remove('current'));
+  const el = cardEls[matches[idx]];
+  if (!el) return;
+  el.classList.add('current');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function runSearch() {
+  const q = searchBox.value.trim().toLowerCase();
+  currentMatchIndex = -1;
+
+  if (!q) {
+    clearHighlights();
+    matches = [];
+    counter.textContent = WORDS.length + " ta so'z";
+    return;
+  }
+
+  matches = [];
+  cardEls.forEach((el, i) => {
+    const [en, uz] = WORDS[i];
+    const found = en.toLowerCase().includes(q) || uz.toLowerCase().includes(q);
+    el.classList.toggle('match', found);
+    el.classList.toggle('dim', !found);
+    el.classList.remove('current');
+    if (found) matches.push(i);
+  });
+
+  counter.textContent = matches.length
+    ? matches.length + " ta topildi — o'zi birinchisiga o'tdi"
+    : "Hech narsa topilmadi";
+
+  // O'zi avtomatik ravishda birinchi topilgan so'zga o'tadi
+  if (matches.length) {
+    currentMatchIndex = 0;
+    goToMatch(currentMatchIndex);
+  }
+}
+
+searchBox.addEventListener('input', runSearch);
+
+searchBox.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && matches.length) {
+    e.preventDefault();
+    currentMatchIndex = (currentMatchIndex + 1) % matches.length;
+    goToMatch(currentMatchIndex);
+    counter.textContent = (currentMatchIndex + 1) + " / " + matches.length + " ta mos so'z";
+  }
+});
+</script>
+
+</body>
+</html>
